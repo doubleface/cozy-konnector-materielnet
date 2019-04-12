@@ -1,10 +1,8 @@
-const request = require("request");
 const cheerio = require("cheerio");
 const moment = require("moment");
 
 const {
     CookieKonnector,
-    saveBills,
     log,
     errors
 } = require("cozy-konnector-libs");
@@ -36,13 +34,13 @@ class MaterielnetKonnector extends CookieKonnector {
             }
         }
         // We encounter a 200 on Orders page
-        log('info', 'Login cookies seems to be valid')
+        logger.info('Login cookies seems to be valid')
         return true;
     }
 
     async fetch(fields) {
         if (!(await this.testSession())) {
-            log('info', 'Found no correct session, logging in...');
+            logger.info('Found no correct session, logging in...');
             const loginToken = await this.fetchLoginToken();
             await this.login(loginToken, fields);
         }
@@ -51,7 +49,7 @@ class MaterielnetKonnector extends CookieKonnector {
 
         logger.info(`${bills.length} bill(s) retrieved`);
 
-        await saveBills(bills, fields.folderPath, {
+        await this.saveBills(bills, fields.folderPath, {
             identifiers: ["materiel.net"]
         });
     }
