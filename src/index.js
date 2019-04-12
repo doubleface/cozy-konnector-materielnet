@@ -48,7 +48,6 @@ class MaterielnetKonnector extends CookieKonnector {
         const bills = await this.fetchBills(billsPeriods);
 
         logger.info(`${bills.length} bill(s) retrieved`);
-
         await this.saveBills(bills, fields.folderPath, {
             identifiers: ["materiel.net"]
         });
